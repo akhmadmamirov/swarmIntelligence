@@ -52,7 +52,9 @@ qa_with_sources = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retri
 class QueryInput(BaseModel):
     query: str
     @model_validator(pre=False, skip_on_failure=True)
-
+    def validate_some_field(cls, values):
+        # Your validation logic here
+        return values
 
 # Define a route to handle the incoming queries
 @app.route('/query', methods=['POST'])
