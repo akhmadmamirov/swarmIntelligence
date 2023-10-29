@@ -8,7 +8,6 @@ from langchain.vectorstores import Pinecone
 from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
 from dotenv import load_dotenv
-from pydantic import BaseModel
 
 app = Flask(__name__)
 
@@ -48,23 +47,11 @@ docsearch = Pinecone.from_existing_index(index_name, embeddings)
 llm = OpenAI()
 qa_with_sources = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=docsearch.as_retriever(), return_source_documents=True)
 
-# Define a Pydantic model to validate the incoming JSON data
-class QueryInput(BaseModel):
-    query: str
-
-
 # Define a route to handle the incoming queries
 @app.route('/query', methods=['POST'])
 def handle_query():
-    data = request.get_json()
-
-    # Validate the incoming JSON data against the Pydantic model
-    try:
-        query_data = QueryInput(**data)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
-
-    query = query_data.query
+    data = request.json  # Assuming the query is sent in JSON format in the request body
+    query = data.get('query')
 
     if not query:
         return jsonify({"error": "Query parameter is missing"}), 400
