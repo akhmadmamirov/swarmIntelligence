@@ -1,8 +1,8 @@
 from flask import Flask, request, jsonify
 import os
 import pinecone
-from langchain.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+#from langchain.document_loaders import PyPDFLoader
+#from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.vectorstores import Pinecone
 from langchain.chains import RetrievalQA
@@ -27,16 +27,16 @@ os.environ["OPENAI_API_KEY"] = openai_api_key
 pinecone.init(api_key=pinecone_api_key, environment="gcp-starter")
 
 # Load data, split text, create embeddings, and set up vectorstore
-loader = PyPDFLoader("swarmdata.pdf")
-docs = loader.load_and_split()
+#loader = PyPDFLoader("swarmdata.pdf")
+#docs = loader.load_and_split()
 
-text_splitter = RecursiveCharacterTextSplitter(
-    chunk_size=1200,
-    chunk_overlap=200,
-    length_function=len,
-)
+#text_splitter = RecursiveCharacterTextSplitter(
+#    chunk_size=1200,
+#    chunk_overlap=200,
+#    length_function=len,
+#)
 
-docs_chunks = text_splitter.split_documents(docs)
+#docs_chunks = text_splitter.split_documents(docs)
 
 embeddings = OpenAIEmbeddings()
 
