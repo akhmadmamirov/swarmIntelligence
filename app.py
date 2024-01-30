@@ -43,11 +43,14 @@ docs_chunks = text_splitter.split_documents(docs)
 embeddings = OpenAIEmbeddings()
 
 index_name = "chat"
+# Create a new index
+# docsearch = Pinecone.from_documents(docs_chunks, embeddings, index_name=index_name)
+
 docsearch = Pinecone.from_existing_index(index_name, embeddings)
 
 # Create a question answering chain
 llm = ChatOpenAI()  # Specify the supported model
 qa_with_sources = RetrievalQA.from_chain_type(llm=llm, chain_type="stuff", retriever=docsearch.as_retriever(), return_source_documents=True)
-query = "Tell me about swarm intelligence"
+query = "Tell me about Dr. Palmer in this project"
 result = qa_with_sources({"query": query})
-print(result)
+print(result["result"])
